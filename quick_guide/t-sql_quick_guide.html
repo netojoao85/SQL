@@ -1,0 +1,80 @@
+<h1> TRANSACT-SQL (T-SQL) Quick Reference Guide </h1> 
+
+<h3>Welcome to my T-SQL reference Guide! This guide aims to be a resource for efficiently performing common tasks using essential T-SQL commands.</h3>
+
+<h3> Create a new table</h3>
+
+CREATE TABLE '<i>name_of_table</i>'();
+The columns defined within a PRIMARY KEY constraint must be defined as NOT NULL.
+<table>
+    <tr>
+        <th>No Assigning Keys</th>
+        <th>Assigning keys</th>
+    </tr>
+    <tr>
+        <td>CREATE TABLE friends ( <br>
+            id INT NOT NULL, <br>
+            first_name varchar(30),  <br>
+            last_name varchar(30),  <br>
+            birthdate date <br>
+        )
+        </td>
+
+        <td>CREATE TABLE friends (<br>
+            id INT NOT NULL,<br>
+            first_name varchar(30),<br>
+            last_name varchar(30),<br>
+            birthdate date<br>
+        )</td>
+    </tr>
+</table>
+
+
+<h3> Create a primary key (pk) in an existing table</h3>
+ALTER TABLE friends <br>
+ADD CONSTRAINT PK_friends_id PRIMARY KEY CLUSTERED (id)
+
+
+<h3> Change values </h3>
+UPDATE friends
+SET first_name = 'Iryna' 
+WHERE first_name = 'Irina'
+
+
+<h3> Add new columns/variables </h3>
+ALTER TABLE friends
+	ADD email varchar(50)
+
+UPDATE friends
+SET email = 'first@email.com'
+WHERE id = 1
+
+UPDATE friends
+SET email = 'second@email.com'
+WHERE id = 2
+
+UPDATE friends
+SET email = 'third@email.com'
+WHERE id = 3
+
+
+
+<h3> Delete existing records </h3>
+--Delete existing records
+DELETE FROM friends
+WHERE email = 'first@email.com'
+
+<h3>Clean all table</h3>
+TRUNCATE TABLE friends
+
+<h3>-- Eliminate/Delete the table</h3>
+DROP TABLE friends
+
+<h3>--rename column/variable</h3>
+EXEC sp_rename 'friends.email', 'email_personal', 'COLUMN'
+
+<h3>--rename table</h3>
+EXEC sp_rename 'friends', 'friends_childhood'
+
+
+

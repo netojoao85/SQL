@@ -1,0 +1,84 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{sql, connection = conn}
+SELECT *
+FROM [omni_company].[dbo].[friends] 
+```
+
+
+## Create tables
+```{sql, connection = conn}
+
+CREATE TABLE [omni_company].[dbo].[friends] (
+    id INT NOT NULL,
+    first_name VARCHAR(30),
+    last_name VARCHAR(30),
+    birthdate DATE
+)
+```
+
+## Insert rows
+```{sql, connection = conn}
+INSERT INTO friends VALUES(1, 'Irina', 'Munroe', '1949-05-30')
+INSERT INTO friends VALUES(2, 'Joel', 'Martin', '1945-04-30')
+INSERT INTO friends VALUES(3, 'Jonh', 'Smith', '1940-05-30')
+```
+
+
+
+```{sql, connection = conn}
+--Insert a value for a target column
+INSERT INTO friends(id, first_name) VALUES(1, 'Irina')
+```
+
+
+## Create a primary key (pk) in an existing table
+```{sql, connection = conn}
+/* The variable id of the friends table will be assigned as a pk with the name PK_friends_id */
+
+ALTER TABLE friends
+	ADD CONSTRAINT PK_friends_id PRIMARY KEY CLUSTERED (id)
+```
+
+## Change values
+```{sql, connection = conn}
+UPDATE friends
+SET first_name = 'Iryna' 
+WHERE first_name = 'Irina'
+```
+
+## Add new columns
+```{sql, connection = conn}
+ALTER TABLE friends
+	ADD email varchar(50)
+```
+
+## Rename columns
+```{sql, connection = conn}
+EXEC sp_rename 'friends.email', 'email_personal', 'COLUMN'
+```
+
+## Delete existing records
+```{sql, connection = conn}
+DELETE FROM friends
+WHERE email = 'first@email.com'
+```
+
+## Clean all table
+```{sql, connection = conn}
+TRUNCATE TABLE friends
+```
+
+## Delete the table
+```{sql, connection = conn}
+DROP TABLE friends
+```
+
+## Rename table
+```{sql, connection = conn}
+EXEC sp_rename 'friends', 'friends_childhood'
+```
+

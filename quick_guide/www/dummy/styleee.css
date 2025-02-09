@@ -1,0 +1,101 @@
+
+
+
+/*--- HEADER & TITLE -------------------------------------------------*/
+
+    div#header {background-color: orange; margin-top:0px}
+        
+    h1.title{ 
+        padding: 15px 0px 15px 0px;
+        margin-top:0px;
+        margin-left:200px;
+        color: white;
+    }
+
+   /* h3.subtitle{margin-left:300px; margin-top:0px; margin-bottom: 100px;}*/
+
+
+
+/*--- TOC_FLOAT ------------------------------------------------------*/
+
+    /* -- Costumise tab's color selected --*/
+    li.tocify-item.list-group-item.active {background-color: #333344; color: white;}
+
+
+    /* -- Costumise body --*/
+    .tocify ul, .tocify li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    line-height: 20px;
+    background-color: white;
+    color:var(--lightblue);
+    }
+
+
+
+/*--- BODY -----------------------------------------------------------*/
+
+body {background-color: white; color: black;}  
+
+p{
+    text-align: justify;
+    line-height: 1.5;
+    float: left;
+}
+
+h2, .h2 {
+    color:red
+}
+
+      
+
+/*--- TABSETS --------------------------------------------------------*/            
+
+    /*-- Dimension of each tab --*/
+    .tabset .nav-tabs > li {width: 50%;}
+
+    /*-- Tab selected --*/
+    .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+        cursor: default;
+        background-color: #B3E0FF;
+        border-top: 5px solid ;
+        border-top-color: #A5CEEB;
+        color:#333333;
+        text-align:center;
+        text-transform: uppercase;
+        font-weight:bold;
+    }
+    
+    /*-- Tab NO selected --*/ 
+    .nav-tabs>li>a {background-color:#DCEFFB; color:#333333;}
+
+    /*-- Tab NO selected hover --*/ 
+    .nav-tabs>li>a:hover {background-color:#CCCCCC; color:#333333;}
+
+    /*-- border --*/
+    .nav-tabs {border-bottom: 1px solid #4E89AE;}
+
+
+/*---  TABLES --------------------------------------------------------*/
+
+    tr:nth-child(even) { 
+        background: none;
+    }
+
+
+/* -- Customise Result Analysis ---------------------- */
+
+.plot_analysis {
+    background-color: #4E89AE;
+    color: blue;
+    margin: 10px 0px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.exp{
+    background-color: orange;
+    color:red
+}

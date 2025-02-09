@@ -1,0 +1,54 @@
+---
+title: "Transact SQL (T-SQL) "
+subtitle: "Quick Reference Guide"
+output:
+  html_document:
+    keep_md: false
+    df_print: paged
+    css: www/style.css
+    toc: true
+    toc_float: 
+          collapsed: true
+          smooth_scroll: true
+    number_sections: no
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(IRdisplay)
+library(htmltools)
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+
+title_and_header_dir <- "www/title_and_header.html"
+
+```
+
+```{r warning=FALSE, echo=FALSE, message=FALSE}
+
+title_and_header <- readLines(title_and_header_dir, warn = FALSE)
+HTML(paste(title_and_header, collapse = "\n"))
+```
+
+## Create tables
+```{sql}
+
+
+```
+
+
+## Create a primary key (pk) in an existing table
+
+## Change values
+
+## Add new columns
+
+## Rename columns
+
+## Delete existing records
+
+## Clean all table
+
+## Delete the table
+
+## Rename table

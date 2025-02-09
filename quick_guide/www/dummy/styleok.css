@@ -1,0 +1,42 @@
+:root{
+    --citi_light_blue: #3E99CE;
+    --citi_dark_blue: #303A72;
+    --blue_analysis: #E7F6FF
+}
+
+
+/*--- HEADER & TITLE -------------------------------------------------*/
+
+    div#header {background-color: var(--citi_dark_blue); margin-top:0px}
+            
+    h1.title{ 
+        padding: 15px 0px 15px 0px;
+        margin-top:0px;
+        margin-left:200px;
+        color: white;
+    }
+
+
+/*--- BODY -----------------------------------------------------------*/
+
+    body {background-color: white; color: black}  
+
+    p{
+        text-align: justify;
+        line-height: 1.5;
+    }
+
+    h2, .h2 {
+        color:var(--citi_light_blue)
+    }
+
+
+
+
+.plot_analysis{
+    background-color: var(--blue_analysis);
+    color: black;
+    padding: 10px 15px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, 
+    rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}

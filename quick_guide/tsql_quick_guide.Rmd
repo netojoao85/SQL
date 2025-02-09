@@ -1,0 +1,229 @@
+---
+title: "Transact SQL (T-SQL) "
+subtitle: "Quick Reference Guide"
+output:
+  html_document:
+    keep_md: false
+    df_print: paged
+    css: www/style.css
+    toc: true
+    toc_float: 
+          collapsed: false
+          smooth_scroll: false
+    number_sections: no
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(IRdisplay)
+library(htmltools)
+```
+
+```{r warning=FALSE, echo=FALSE, message=FALSE}
+
+title_and_header_dir <- "www/title_and_header.html"
+
+title_and_header <- readLines(title_and_header_dir, warn = FALSE)
+HTML(paste(title_and_header, collapse = "\n"))
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+
+# Establish the connection with SQL Server
+library(RODBC)
+library(DBI)
+library(odbc)
+
+server = "JOAONETO\\SQL_JNETO" # SQL Server name
+database = "corporation" # database name
+table = "employees" #table name
+
+conn <- dbConnect(
+  odbc::odbc(), 
+  driver = "SQL Server",
+  server = server,
+  database = database,
+  #uid = "your_username",
+  #pwd = "your_password
+  Trusted_Connection = "yes"
+)
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+# Close the database connection
+#dbDisconnect(conn = conn)
+```
+
+## 1. Database Management
+
+### Create tables
+
+```{sql, connection = conn}
+/*
+CREATE TABLE [omni_company].[dbo].[friends] (
+    id INT NOT NULL,
+    first_name VARCHAR(30),
+    last_name VARCHAR(30),
+    birthdate DATE
+)
+*/
+```
+
+### Insert rows
+
+```{sql, connection = conn}
+/*
+INSERT INTO friends VALUES(1, 'Irina', 'Munroe', '1949-05-30')
+INSERT INTO friends VALUES(2, 'Joel', 'Martin', '1945-04-30')
+INSERT INTO friends VALUES(3, 'Jonh', 'Smith', '1940-05-30')
+*/
+```
+
+```{sql, connection = conn, echo = FALSE, message=FALSE, warning=FALSE, include=TRUE}
+/*
+SELECT *
+FROM [omni_company].[dbo].[friends] 
+*/
+```
+
+```{sql, connection = conn}
+--DROP TABLE [omni_company].[dbo].[friends] 
+```
+
+## 2. Database Querying & Analysis
+
+### Filter & Sorting
+
+```{sql, connection = conn}
+SELECT *
+FROM corporation.dbo.employees
+```
+
+### Date datatype manage
+
+The '***DATEPART()***' function returns an integer value, extracting the specified date part of the specified date.
+
+The '***GETDATE()***' function returns the current database system date and time (YYYY-MM-DD hh:mm:ss.mmm).
+
+```{sql, connection = conn}
+SELECT 
+  first_name, 
+  last_name, 
+  start_date,
+  DATEPART(year, start_date) 'year',
+  DATEPART(month, start_date) 'month',
+  DATEPART(day, start_date) 'day',
+  DATEPART(hour, GETDATE()) 'hour',
+  DATEPART(minute, GETDATE()) 'minute',
+  DATEPART(second, GETDATE()) 'second'
+FROM corporation.dbo.employees
+```
+
+
+### Create variables
+
+How many employees started in March of 2001?
+```{sql, connection = conn, warning = FALSE, message= FALSE}
+DECLARE @year INT, @month INT;
+SET @year = 2001
+SET @month = 4
+
+SELECT first_name, last_name, department, start_date
+FROM corporation.dbo.employees
+WHERE 
+  DATEPART(year, start_date) = @year AND 
+  DATEPART(month, start_date) = @month
+```
+
+
+### Grouping
+
+### Joins
+
+### CTE (Common Table Expression)
+
+### Window functions
+
+Show for each employee their salary together with the minimum and 
+maximum salaries of employees in their department.
+```{sql, connection = conn, warning = FALSE, message= FALSE}
+SELECT 
+	first_name, 
+	last_name,
+	department,
+	salary,
+	MIN(salary) OVER (PARTITION BY department) AS min_salary_dep,
+	MAX(salary) OVER (PARTITION BY department) AS max_salary_dep
+FROM corporation.dbo.employees
+ORDER BY min_salary_dep
+```
+
+
+Show for each employee the number of employees who are members of the 
+same department as them.
+```{sql, connection = conn, warning = FALSE, message= FALSE}
+SELECT 
+	first_name,
+	last_name, 
+	department,
+	COUNT(id) OVER (PARTITION BY department) 'num_employees_dep'
+FROM corporation.dbo.employees
+ORDER BY num_employees_dep DESC
+```
+
+Show for each employee the number of employees who started in the same 
+month as them.
+```{sql, connection = conn, warning = FALSE, message= FALSE}
+SELECT 
+	first_name, 
+	last_name,
+	start_date,
+	COUNT(id) OVER(
+	PARTITION BY DATEPART(month, start_date), DATEPART(year, start_date)) 'num_employees'
+FROM corporation.dbo.employees
+WHERE DATEPART(year, start_date) >= 1990
+```
+
+Get a table of employees showing the order in which they started work with the corporation split by department 
+```{sql, connection = conn, warning = FALSE, message= FALSE}
+SELECT 
+	first_name,
+	last_name, 
+	department,
+	start_date,
+	RANK() OVER (PARTITION BY department ORDER BY start_date ASC) 'rank_department'
+FROM corporation.dbo.employees
+WHERE DATEPART(year, start_date) >= 1990
+```
+
+
+Get a table of employee id, first and last name, grade and salary, together with two new columns showing the maximum salary for employees of their grade, and the minimum salary for employees of their grade.
+```{sql, connection = conn, warning = FALSE, message= FALSE}
+SELECT 
+	id,
+	first_name,
+	last_name,
+	grade, 
+	salary,
+	MAX(salary) OVER (PARTITION BY grade) 'max_salary_grade',
+	MIN(salary) OVER (PARTITION BY grade) 'min_salary_grade'
+FROM employees
+WHERE grade IS NOT NULL
+ORDER BY id ASC
+```
+
+
+Add a column for each employee showing the ratio of their salary to the average salary of their team.
+```{sql, connection = conn, warning = FALSE, message= FALSE}
+
+SELECT 
+	e.first_name,
+	e.last_name,
+	e.salary,
+	t.name,
+	AVG(e.salary) OVER (PARTITION BY t.name) AS avg_salary_team,
+	e.salary/AVG(e.salary) OVER (PARTITION BY t.name) 'ratio'
+	--CONVERT(numeric(10,2), e.salary/AVG(e.salary) OVER (PARTITION BY t.name)) AS avg
+FROM employees AS e LEFT JOIN teams AS t
+ON e.team_id = t.id	
+WHERE e.salary IS NOT NULL
+```

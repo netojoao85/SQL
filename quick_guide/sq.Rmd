@@ -1,0 +1,23 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+
+```{}
+
+This SQL script creates a table named `friends` with four columns: `id`, `first_name`, `last_name`, and `birthdate`.
+
+
+```
+
+
+```sql
+CREATE TABLE friends (
+    id INT NOT NULL,
+    first_name VARCHAR(30),
+    last_name VARCHAR(30),
+    birthdate DATE
+);
